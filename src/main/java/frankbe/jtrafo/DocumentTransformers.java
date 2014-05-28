@@ -1,4 +1,4 @@
-package frankbe.xtemple;
+package frankbe.jtrafo;
 
 import java.io.Reader;
 import java.io.Writer;

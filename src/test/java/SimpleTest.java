@@ -1,10 +1,9 @@
-import frankbe.xtemple.*;
+import frankbe.jtrafo.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URISyntaxException;

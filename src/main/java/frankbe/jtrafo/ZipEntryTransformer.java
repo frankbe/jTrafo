@@ -1,4 +1,4 @@
-package frankbe.xtemple;
+package frankbe.jtrafo;
 
 import java.io.*;
 import java.util.zip.ZipEntry;
