@@ -10,6 +10,8 @@
     <version>0.4-SNAPSHOT</version>
     <name>jTrafo</name>
 
+    <!--see 'Maven repository on github' - http://stackoverflow.com/a/14013645/1436741-->
+
     <properties>
         <!-- github server corresponds to entry in ~/.m2/settings.xml -->
         <github.global.server>github</github.global.server>
@@ -52,6 +54,7 @@
                 <artifactId>site-maven-plugin</artifactId>
                 <version>0.9</version>
                 <configuration>
+                    <!--<merge>true</merge> for releases-->
                     <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
                     <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
                     <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
@@ -81,6 +84,19 @@
         </repository>
     </distributionManagement>
 
+<!--
+    for client projects...
+    <repositories>
+        <repository>
+            <id>jTrafo-mvn-repo</id>
+            <url>https://raw.github.com/frankbe/jTrafo/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+    -->
 
 
 </project>
