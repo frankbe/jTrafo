@@ -31,12 +31,15 @@ public class ZipEntryTransformer implements IOTransformer<ZipEntryWrapper, ZipOu
         ZipEntry inputZipEntry = inputZipEntryWrapper.zipEntry;
         if (!skipEntry(inputZipEntryWrapper.zipEntry)) {
             ZipEntry outputZipEntry = new ZipEntry(inputZipEntry.getName());
+            outputZipEntry.setComment(inputZipEntry.getComment());
+            outputZipEntry.setExtra(inputZipEntry.getExtra());
+            outputZipEntry.setTime(inputZipEntry.getTime());
             InputStream inputStream = inputZipEntryWrapper.getInputStream(inputZipEntry);
             zipOutputStream.putNextEntry(outputZipEntry);
             Reader reader = new CustomizedBufferedReader(new InputStreamReader(inputStream));
             Writer writer = new BufferedWriter(new OutputStreamWriter(zipOutputStream));
             if (skipEntryTransformation(inputZipEntry)) {
-                IOUtils.copy(reader, writer);
+                IOUtils.copy(inputStream, zipOutputStream);
             } else {
                 contentTransformer.transform(reader, writer);
             }

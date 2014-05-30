@@ -28,6 +28,7 @@ public class ZipFileTransformer implements IOTransformer<File, File> {
             for (ZipEntry entry: Collections.list(zipInputFile.entries())) {
                 contentTransformer.transform(new ZipEntryWrapper(zipInputFile, entry), zipOutputStream);
             }
+            zipOutputStream.finish();
        }
     }
 

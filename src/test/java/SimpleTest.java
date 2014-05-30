@@ -21,10 +21,18 @@ import static org.junit.Assert.assertTrue;
 @RunWith(JUnit4.class)
 public class SimpleTest {
 
+    private Path getInputPath(String fileName) throws URISyntaxException {
+        return Paths.get(SimpleTest.class.getResource("/" + fileName).toURI());
+    }
+
+    private Path getOutputPath(String fileName) throws URISyntaxException {
+        return Paths.get("./target/" + fileName);
+    }
+
     @Test
-    public void oneAndOnly() throws IOException, URISyntaxException {
-        Path inputPath = Paths.get(SimpleTest.class.getResource("/sample1-templ.docx").toURI());
-        Path outputPath = Paths.get("./target/sample1.docx");
+    public void sample1() throws IOException, URISyntaxException {
+        Path inputPath = getInputPath("sample1-templ.docx");
+        Path outputPath = getOutputPath("sample1.docx");
         Map<String, String> scope= new HashMap();
         scope.put("animal", "duck");
         scope.put("food", "worm");
@@ -39,5 +47,17 @@ public class SimpleTest {
             }
         }).transform(outputPath.toFile(), Files.createTempFile("jTrafo_", null).toFile());
     }
+
+
+    @Test
+    public void sample0() throws IOException, URISyntaxException {
+        // no transformation, just like copy...
+        Path inputPath = getInputPath("sample0-templ.odt");
+        Path outputPath = getOutputPath("sample0.odt");
+        ZipFileTransformer trafo = DocumentTransformers.newMustacheDocxTransformer(new Object());
+        trafo.transform(inputPath.toFile(), outputPath.toFile());
+        assertTrue(outputPath.toFile().exists());
+    }
+
 
 }
