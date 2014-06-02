@@ -26,8 +26,8 @@ public class MustacheStringReplacer implements IOTransformer<Reader, Writer> {
     }
 
     @Override
-    public void transform(Reader source, Writer target) throws IOException {
-        Mustache mustache = mustacheFactory.compile(source, "main");  //TODO check - why 'main'?
-        mustache.execute(target, scopeObject);
+    public void transform(Reader input, Writer output) throws IOException {
+        Mustache mustache = mustacheFactory.compile(input, "main");  //TODO check - why 'main'?
+        mustache.execute(output, scopeObject);
     }
 }

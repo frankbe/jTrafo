@@ -33,19 +33,19 @@ public class SimpleTest {
     public void sample1() throws IOException, URISyntaxException {
         Path inputPath = getInputPath("sample1-templ.docx");
         Path outputPath = getOutputPath("sample1.docx");
-        Map<String, String> scope= new HashMap();
+        Map scope = new HashMap<String, String>();
         scope.put("animal", "duck");
         scope.put("food", "worm");
         ZipFileTransformer trafo = DocumentTransformers.newMustacheDocxTransformer(scope);
-        trafo.transform(inputPath.toFile(), outputPath.toFile());
+        trafo.transform(inputPath, outputPath);
         assertTrue(outputPath.toFile().exists());
         //mock transformer to check the text of the output file
         DocumentTransformers.newDocxTransformer(new IOTransformer<Reader, Writer>() {
-            @Override public void transform(Reader source, Writer target) throws IOException {
-                String text = IOUtils.readAll(source);
+            @Override public void transform(Reader input, Writer output) throws IOException {
+                String text = IOUtils.readAll(input);
                 assertTrue(text.contains("duck") && text.contains("worm"));
             }
-        }).transform(outputPath.toFile(), Files.createTempFile("jTrafo_", null).toFile());
+        }).transform(outputPath, Files.createTempFile("jTrafo_", null));
     }
 
 
@@ -55,7 +55,7 @@ public class SimpleTest {
         Path inputPath = getInputPath("sample0-templ.odt");
         Path outputPath = getOutputPath("sample0.odt");
         ZipFileTransformer trafo = DocumentTransformers.newMustacheDocxTransformer(new Object());
-        trafo.transform(inputPath.toFile(), outputPath.toFile());
+        trafo.transform(inputPath, outputPath);
         assertTrue(outputPath.toFile().exists());
     }
 

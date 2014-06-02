@@ -26,25 +26,25 @@ public class ZipEntryTransformer implements IOTransformer<ZipEntryWrapper, ZipOu
     protected boolean skipEntryTransformation(ZipEntry entry) { return false; }
 
     @Override
-    public void transform(ZipEntryWrapper inputZipEntryWrapper,
-                                     ZipOutputStream zipOutputStream) throws IOException {
-        ZipEntry inputZipEntry = inputZipEntryWrapper.zipEntry;
-        if (!skipEntry(inputZipEntryWrapper.zipEntry)) {
+    public void transform(ZipEntryWrapper input,
+                                     ZipOutputStream output) throws IOException {
+        ZipEntry inputZipEntry = input.zipEntry;
+        if (!skipEntry(input.zipEntry)) {
             ZipEntry outputZipEntry = new ZipEntry(inputZipEntry.getName());
             outputZipEntry.setComment(inputZipEntry.getComment());
             outputZipEntry.setExtra(inputZipEntry.getExtra());
             outputZipEntry.setTime(inputZipEntry.getTime());
-            InputStream inputStream = inputZipEntryWrapper.getInputStream(inputZipEntry);
-            zipOutputStream.putNextEntry(outputZipEntry);
+            InputStream inputStream = input.getInputStream(inputZipEntry);
+            output.putNextEntry(outputZipEntry);
             Reader reader = new CustomizedBufferedReader(new InputStreamReader(inputStream));
-            Writer writer = new BufferedWriter(new OutputStreamWriter(zipOutputStream));
+            Writer writer = new BufferedWriter(new OutputStreamWriter(output));
             if (skipEntryTransformation(inputZipEntry)) {
-                IOUtils.copy(inputStream, zipOutputStream);
+                IOUtils.copy(inputStream, output);
             } else {
                 contentTransformer.transform(reader, writer);
             }
             writer.flush();
-            zipOutputStream.closeEntry();
+            output.closeEntry();
         }
     }
 }
