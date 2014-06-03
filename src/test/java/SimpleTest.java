@@ -6,10 +6,10 @@ import org.junit.runners.JUnit4;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.charset.Charset;
+import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,10 +33,11 @@ public class SimpleTest {
     public void sample1() throws IOException, URISyntaxException {
         Path inputPath = getInputPath("sample1-templ.docx");
         Path outputPath = getOutputPath("sample1.docx");
+        //Path outputPath = Paths.get("/home/bert/projects/_external/jTrafo/target/sample1.zip");
         Map scope = new HashMap<String, String>();
         scope.put("animal", "duck");
         scope.put("food", "worm");
-        ZipFileTransformer trafo = DocumentTransformers.newMustacheDocxTransformer(scope);
+        IOTransformer trafo = DocumentTransformers.newMustacheDocxTransformer(scope);
         trafo.transform(inputPath, outputPath);
         assertTrue(outputPath.toFile().exists());
         //mock transformer to check the text of the output file
@@ -54,10 +55,28 @@ public class SimpleTest {
         // no transformation, just like copy...
         Path inputPath = getInputPath("sample0-templ.odt");
         Path outputPath = getOutputPath("sample0.odt");
-        ZipFileTransformer trafo = DocumentTransformers.newMustacheDocxTransformer(new Object());
+        IOTransformer trafo = DocumentTransformers.newMustacheDocxTransformer(new Object());
         trafo.transform(inputPath, outputPath);
         assertTrue(outputPath.toFile().exists());
     }
 
+
+    @Test
+    public void testCreateZip() throws Exception {
+        Map<String, String> env = new HashMap<>();
+        env.put("create", "true");
+        // locate file system by using the syntax
+        // defined in java.net.JarURLConnection
+        URI uri = URI.create("jar:file:/tmp/test.zip");
+
+        try (FileSystem zipfs = FileSystems.newFileSystem(uri, env)) {
+            Path externalTxtFile = Paths.get("/home/bert/work/test.c");
+            Path pathInZipfile = zipfs.getPath("/test.c");
+            // copy a file into the zip file
+            Files.copy(externalTxtFile, pathInZipfile,
+                    StandardCopyOption.REPLACE_EXISTING);
+
+        }
+    }
 
 }
