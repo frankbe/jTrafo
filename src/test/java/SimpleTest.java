@@ -29,10 +29,7 @@ public class SimpleTest {
         return Paths.get("./target/" + fileName);
     }
 
-    @Test
-    public void sample1() throws IOException, URISyntaxException {
-        Path inputPath = getInputPath("sample1-templ.docx");
-        Path outputPath = getOutputPath("sample1.docx");
+    private void performSample1(Path inputPath, Path outputPath) throws IOException, URISyntaxException {
         //Path outputPath = Paths.get("/home/bert/projects/_external/jTrafo/target/sample1.zip");
         Map scope = new HashMap<String, String>();
         scope.put("animal", "duck");
@@ -49,6 +46,12 @@ public class SimpleTest {
         }).transform(outputPath, Files.createTempFile("jTrafo_", null));
     }
 
+    @Test
+    public void sample1() throws IOException, URISyntaxException {
+        performSample1(getInputPath("sample1-templ.docx"), getOutputPath("sample1.docx"));
+        performSample1(getInputPath("sample1-templ.odt"), getOutputPath("sample1.odt"));
+    }
+
 
     @Test
     public void sample0() throws IOException, URISyntaxException {
@@ -61,6 +64,7 @@ public class SimpleTest {
     }
 
 
+/*
     @Test
     public void testCreateZip() throws Exception {
         Map<String, String> env = new HashMap<>();
@@ -78,5 +82,6 @@ public class SimpleTest {
 
         }
     }
-
+*/
+  
 }

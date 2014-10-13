@@ -13,7 +13,7 @@ public class DocumentTransformers  {
                                                               final String filePattern) {
         IOTransformer<Path, Path> fileTransformer = new FileTransformer(contentTransformer) {
             @Override protected boolean skipEntryTransformation(Path path) {
-                return !filePattern.matches(path.toString());
+                return !path.toString().matches(filePattern);
             }
         };
         ZipArchiveTransformer archiveTransformer = new ZipArchiveTransformer(fileTransformer);
@@ -25,7 +25,7 @@ public class DocumentTransformers  {
     }
 
     public static ZipArchiveTransformer newOdtTransformer(IOTransformer<Reader, Writer> contentTransformer) {
-        return newDocumentTransformer(contentTransformer, "/content.xml");//TODO check
+        return newDocumentTransformer(contentTransformer, "/content.xml|/styles.xml");//TODO check
     }
 
     public static ZipArchiveTransformer newMustacheDocxTransformer(Object scopeObject) {
